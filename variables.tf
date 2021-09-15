@@ -24,8 +24,8 @@ variable "operational_mode" {
 
   validation {
     # contains https://www.terraform.io/docs/language/functions/contains.html
-    condition     = can(contains(["demo", "mounted", "external"], var.operational_mode))
-    error_message = "String value \"Demo\", \"mounted\", or \"external\"."
+    condition     = contains(["demo", "mounted", "external"], var.operational_mode)
+    error_message = "String value \"demo\", \"mounted\", or \"external\"."
   }
 }
 variable "replicated_bundle_path" {
