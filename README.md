@@ -139,10 +139,6 @@ Usage [terraform-docs markdown](https://github.com/terraform-docs/terraform-docs
 <hr />
 
 
-
-
-
-
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
