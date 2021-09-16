@@ -1,13 +1,7 @@
 {
-    "aws_access_key_id": {
-        "value": "REPLACE WITH YOUR ACCESS KEY"
-    },
-    "aws_instance_profile": {
-        "value": "0"
-    },
-    "aws_secret_access_key": {
-        "value": "REPLACE WITH YOUR SECRET KEY"
-    },
+    "aws_access_key_id": {},
+    "aws_instance_profile": {},
+    "aws_secret_access_key": {},
     "azure_account_key": {},
     "azure_account_name": {},
     "azure_container": {},
@@ -27,20 +21,21 @@
     "extern_vault_token_renew": {},
     "extra_no_proxy": {},
     "hostname": {
-        "value": "REPLACE WITH YOUR HOSTNAME"
+        "value": "${hostname}"
     },
-    "installation_type": {
-        "value": "production"
-    },
+    "installation_type": %{ if installation_type == "demo" }{
+        "value": "poc"
+    }%{ else }
+	{}%{ endif },
     "placement": {
         "value": "placement_s3"
     },
     "postgres_url": {
         "value": "REPLACE WITH YOUR POSTGRE URL - EXAMPLE: postgresql://postgres:password@dbserver.customer.com:5432/dbname?sslmode=disable"
     },
-    "production_type": {
-        "value": "external"
-    },
+    "production_type": %{ if production_type != "" }{
+        "value": "${production_type}"
+    }%{ else }{}%{ endif },
     "s3_bucket": {
         "value": "REPLACE WITH YOUR S3 BUCKET NAME"
     },
