@@ -8,7 +8,12 @@ resource "null_resource" "tfe_installer_deploy" {
     host        = var.tfe_hostname
     port        = var.connection_port
   }
-
+  provisioner "remote-exec" {
+    inline = [
+      "sudo mkdir -p /opt/tfe",
+      "sudo chmod 0777 /opt/tfe"
+    ]
+  }
   provisioner "file" {
     #
     content     = templatefile("${path.module}/templates/replicated_settings.conf.tpl", {})
