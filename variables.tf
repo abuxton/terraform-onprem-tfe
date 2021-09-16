@@ -3,7 +3,12 @@
 #-------------------------------------------------------------------------------------------------------------------------------------------
 variable "tfe_license_filepath" {
   type        = string
+  default     = ""
   description = "Full filepath of TFE license file (`.rli` file extension). A local filepath or S3 is supported. If s3, the path should start with `s3://`."
+  validation {
+    condition     = try(fileexists(var.tfe_license_filepath), var.tfe_license_filepath == "")
+    error_message = "You have not provided or the file does not exist or the you do not have sufficient privilages to read the file."
+  }
 }
 
 variable "airgap_install" {
@@ -152,4 +157,24 @@ variable "os_distro" {
     condition     = contains(["ubuntu", "rhel", "centos"], var.os_distro)
     error_message = "Supported values are `ubuntu`, `rhel` or `centos`."
   }
+}
+
+variable "connection_user" {
+  type        = string
+  description = "user id for ssh key provided in string `ssh <connection_user>@127.0.0.1` defaults to root."
+  default     = "root"
+}
+variable "connection_private_key" {
+  type        = string
+  default     = ""
+  description = "path to private key for ssh, password is not supported"
+  validation {
+    condition     = try(fileexists(var.connection_private_key), var.connection_private_key == "")
+    error_message = "You have not provided or the file does not exist or the you do not have sufficient privilages to read the file."
+  }
+}
+variable "connection_port" {
+  type        = string
+  description = "SSH port provided in string `ssh <connection_user>@127.0.0.1 -p <connection_port>` defaults to 22."
+  default     = "22"
 }
