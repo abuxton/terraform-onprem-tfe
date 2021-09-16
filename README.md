@@ -30,6 +30,24 @@ The "happy path" scenario that is probably the quickest and easiest to deploy an
 
 ## Usage
 
+The bare minium usage regarding modules and providers in this module
+``` json
+# ./providers.tf
+terraform {
+  required_providers {
+    template = {
+      source = "hashicorp/template"
+      version = ">= 2.2.0"
+    }
+  }
+}
+
+provider "template" {
+  # Configuration options
+}
+
+```
+
 ### Examples
 See the [examples](./examples/README.md) section for detailed information on _deployment scenarios_ this module accelerator supports.
 <p>&nbsp;</p>
@@ -146,7 +164,9 @@ No requirements.
 
 ## Providers
 
-No providers.
+| Name | Version |
+|------|---------|
+| <a name="provider_null"></a> [null](#provider\_null) | 3.1.0 |
 
 ## Modules
 
@@ -154,7 +174,9 @@ No modules.
 
 ## Resources
 
-No resources.
+| Name | Type |
+|------|------|
+| [null_resource.tfe_installer_deploy](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
 
 ## Inputs
 
@@ -163,6 +185,9 @@ No resources.
 | <a name="input_airgap_install"></a> [airgap\_install](#input\_airgap\_install) | Boolean for TFE installation method to be airgap. Online mode is assumed by default | `bool` | `false` | no |
 | <a name="input_capacity_concurrency"></a> [capacity\_concurrency](#input\_capacity\_concurrency) | Total concurrent Terraform Runs (Plans/Applies) allowed within TFE. | `string` | `"10"` | no |
 | <a name="input_capacity_memory"></a> [capacity\_memory](#input\_capacity\_memory) | Maxium amount of memory (MB) that a Terraform Run (Plan/Apply) can consume within TFE. | `string` | `"512"` | no |
+| <a name="input_connection_port"></a> [connection\_port](#input\_connection\_port) | SSH port provided in string `ssh <connection_user>@127.0.0.1 -p <connection_port>` defaults to 22. | `string` | `"22"` | no |
+| <a name="input_connection_private_key"></a> [connection\_private\_key](#input\_connection\_private\_key) | path to private key for ssh, password is not supported | `string` | `""` | no |
+| <a name="input_connection_user"></a> [connection\_user](#input\_connection\_user) | user id for ssh key provided in string `ssh <connection_user>@127.0.0.1` defaults to root. | `string` | `"root"` | no |
 | <a name="input_console_password"></a> [console\_password](#input\_console\_password) | Password to unlock TFE Admin Console accessible via port 8800. | `string` | n/a | yes |
 | <a name="input_custom_tbw_image_tag"></a> [custom\_tbw\_image\_tag](#input\_custom\_tbw\_image\_tag) | Tag of custom Terraform Build Worker (tbw) image. Examples: `v1`, `latest`. Only specify if `tbw_image` is set to `custom_image`. | `string` | `"latest"` | no |
 | <a name="input_custom_tbw_repo"></a> [custom\_tbw\_repo](#input\_custom\_tbw\_repo) | Name of Repository where custom Terraform Build Worker (tbw) image exists. Only specify if `tbw_image` is set to `custom_image`. | `string` | `""` | no |
@@ -181,7 +206,7 @@ No resources.
 | <a name="input_tbw_image"></a> [tbw\_image](#input\_tbw\_image) | Terraform Build Worker container image to use. Set this to `custom_image` to use alternative container image. | `string` | `"default_image"` | no |
 | <a name="input_tfe_airgap_bundle_path"></a> [tfe\_airgap\_bundle\_path](#input\_tfe\_airgap\_bundle\_path) | Full path of TFE airgap bundle in S3 bucket or local path to the execution of terraform. Only specify if `airgap_install` is `true`. | `string` | `""` | no |
 | <a name="input_tfe_hostname"></a> [tfe\_hostname](#input\_tfe\_hostname) | Hostname/FQDN of TFE instance. This name should resolve to the load balancer DNS name and will be how users and systems access TFE. | `string` | n/a | yes |
-| <a name="input_tfe_license_filepath"></a> [tfe\_license\_filepath](#input\_tfe\_license\_filepath) | Full filepath of TFE license file (`.rli` file extension). A local filepath or S3 is supported. If s3, the path should start with `s3://`. | `string` | n/a | yes |
+| <a name="input_tfe_license_filepath"></a> [tfe\_license\_filepath](#input\_tfe\_license\_filepath) | Full filepath of TFE license file (`.rli` file extension). A local filepath or S3 is supported. If s3, the path should start with `s3://`. | `string` | `""` | no |
 | <a name="input_tfe_release_sequence"></a> [tfe\_release\_sequence](#input\_tfe\_release\_sequence) | TFE application version release sequence number within Replicated. Ignored if `airgap_install` is `true`. | `number` | `0` | no |
 
 ## Outputs
