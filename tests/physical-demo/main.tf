@@ -10,4 +10,6 @@ module "tfe" {
   connection_user        = "vagrant"
   connection_port        = 2222
   tfe_license_filepath   = var.tfe_license_filepath
+  public-address         = var.public-address
+  private-address        = var.private-address
 }
