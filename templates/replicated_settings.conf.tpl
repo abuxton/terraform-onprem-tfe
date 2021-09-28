@@ -1,8 +1,8 @@
 {
     "DaemonAuthenticationType":     "password",
-    "DaemonAuthenticationPassword": "INSERT YOUR CONSOLE PASSWORD HERE",
+    "DaemonAuthenticationPassword": "${DaemonAuthenticationPassword}",
     "TlsBootstrapType":             "self-signed",
     "BypassPreflightChecks":        true,
-    "ImportSettingsFrom":           "/tmp/ptfe-install/settings.json",
-    "LicenseFileLocation":          "/tmp/ptfe-install/license.rli"
+    "ImportSettingsFrom":           "/opt/tfe/settings.json",
+    "LicenseFileLocation":          "/opt/tfe/license.rli"
 }

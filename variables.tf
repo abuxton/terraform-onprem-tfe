@@ -143,6 +143,15 @@ variable "hairpin_addressing" {
   default     = false
 }
 
+variable "public-address" {
+  type        = string
+  description = "public IP address for the TFE installer, can be 127.0.0.1"
+}
+variable "private-address" {
+  type        = string
+  description = "private IP address for TFE installer script"
+  default     = "127.0.0.1"
+}
 #-------------------------------------------------------------------------------------------------------------------------------------------
 # Compute
 #-------------------------------------------------------------------------------------------------------------------------------------------
