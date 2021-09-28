@@ -176,7 +176,9 @@ No modules.
 
 | Name | Type |
 |------|------|
-| [null_resource.tfe_installer_deploy](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
+| [null_resource.replicated_conf_deploy](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
+| [null_resource.replicated_install](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
+| [null_resource.tfe_settings_deploy](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
 
 ## Inputs
 
@@ -200,16 +202,20 @@ No modules.
 | <a name="input_operational_mode"></a> [operational\_mode](#input\_operational\_mode) | Operational mode has https://www.terraform.io/docs/enterprise/before-installing/index.html#operational-mode-decision, must be one of Demo(default), mounted, or external | `string` | `"demo"` | no |
 | <a name="input_os_distro"></a> [os\_distro](#input\_os\_distro) | Linux OS distribution for TFE EC2 instance. Choose from `ubuntu`, `rhel`, `centos`. | `string` | `"ubuntu"` | no |
 | <a name="input_physical"></a> [physical](#input\_physical) | Boolean regarding deployment on physical servers or using a virtualization provider where supported. | `bool` | `true` | no |
+| <a name="input_private-address"></a> [private-address](#input\_private-address) | private IP address for TFE installer script | `string` | `"127.0.0.1"` | no |
+| <a name="input_public-address"></a> [public-address](#input\_public-address) | public IP address for the TFE installer, can be 127.0.0.1 | `string` | n/a | yes |
 | <a name="input_remove_import_settings_from"></a> [remove\_import\_settings\_from](#input\_remove\_import\_settings\_from) | Replicated setting to automatically remove the `/etc/tfe-settings.json` file (referred to as `ImportSettingsFrom` by Replicated) after installation. | `bool` | `false` | no |
 | <a name="input_replicated_bundle_path"></a> [replicated\_bundle\_path](#input\_replicated\_bundle\_path) | Full path of Replicated bundle (`replicated.tar.gz`). This can be in an S3 bucket or local path to the execution of terraform.  Only specify if `airgap_install` is `true`. | `string` | `""` | no |
 | <a name="input_syslog_endpoint"></a> [syslog\_endpoint](#input\_syslog\_endpoint) | Syslog endpoint for Logspout to forward TFE logs to. | `string` | `""` | no |
 | <a name="input_tbw_image"></a> [tbw\_image](#input\_tbw\_image) | Terraform Build Worker container image to use. Set this to `custom_image` to use alternative container image. | `string` | `"default_image"` | no |
 | <a name="input_tfe_airgap_bundle_path"></a> [tfe\_airgap\_bundle\_path](#input\_tfe\_airgap\_bundle\_path) | Full path of TFE airgap bundle in S3 bucket or local path to the execution of terraform. Only specify if `airgap_install` is `true`. | `string` | `""` | no |
 | <a name="input_tfe_hostname"></a> [tfe\_hostname](#input\_tfe\_hostname) | Hostname/FQDN of TFE instance. This name should resolve to the load balancer DNS name and will be how users and systems access TFE. | `string` | n/a | yes |
-| <a name="input_tfe_license_filepath"></a> [tfe\_license\_filepath](#input\_tfe\_license\_filepath) | Full filepath of TFE license file (`.rli` file extension). A local filepath or S3 is supported. If s3, the path should start with `s3://`. | `string` | `""` | no |
+| <a name="input_tfe_license_filepath"></a> [tfe\_license\_filepath](#input\_tfe\_license\_filepath) | Full filepath of TFE license file (`.rli` file extension). A local filepath or S3 is supported. If s3, the path should start with `s3://`. | `string` | n/a | yes |
 | <a name="input_tfe_release_sequence"></a> [tfe\_release\_sequence](#input\_tfe\_release\_sequence) | TFE application version release sequence number within Replicated. Ignored if `airgap_install` is `true`. | `number` | `0` | no |
 
 ## Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+| <a name="output_tfe_replicated_console_url"></a> [tfe\_replicated\_console\_url](#output\_tfe\_replicated\_console\_url) | n/a |
 <!-- END_TF_DOCS -->
