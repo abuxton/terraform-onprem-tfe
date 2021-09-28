@@ -29,7 +29,8 @@
     "installation_type": %{ if installation_type == "demo" }{
         "value": "poc"
     }%{ else }
-	{}%{ endif },
+       {"value": "${installation_type}"}
+    %{ endif },
     "placement": {
         "value": "placement_s3"
     },

@@ -1,5 +1,9 @@
 #-------------------------------------------------------------------------------------------------------------------------------------------
 # Terraform related configuration variables
+# https://www.terraform.io/docs/enterprise/install/automating-the-installer.html#application-settings
+# https://help.replicated.com/docs/swarm/customer-installations/automating/
+# https://www.terraform.io/docs/enterprise/install/automating-the-installer.html#available-settings
+#
 #-------------------------------------------------------------------------------------------------------------------------------------------
 variable "tfe_license_filepath" {
   type        = string
