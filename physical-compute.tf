@@ -12,7 +12,6 @@ resource "null_resource" "tfe_settings_deploy" {
     # create directory structure for tfe /opt/tfe, and /tmp/ptfe-install
     inline = [
       "sudo mkdir -p /opt/tfe",
-      "sudo chmod 0777 /tmp/ptfe-install",
       "sudo chmod 0777 /opt/tfe"
     ]
   }
@@ -24,6 +23,7 @@ resource "null_resource" "tfe_settings_deploy" {
         hostname          = var.tfe_hostname,
         production_type   = "",
         installation_type = var.operational_mode,
+        enc_password      = var.enc_password,
     })
     destination = "/opt/tfe/settings.json"
   }

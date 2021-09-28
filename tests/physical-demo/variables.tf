@@ -15,3 +15,8 @@ variable "private-address" {
   description = "private IP address for TFE installer script"
   default     = "127.0.0.1"
 }
+variable "enc_password" {
+  type        = string
+  description = "Password to protect unseal key and root token of TFE embedded Vault."
+  sensitive   = true
+}

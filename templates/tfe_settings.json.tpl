@@ -11,6 +11,8 @@
         "value": "10"
     },
     "disk_path": {},
+    "enc_password":
+        "value": "${enc_password}",
     "extern_vault_addr": {},
     "extern_vault_enable": {
         "value": "0"
