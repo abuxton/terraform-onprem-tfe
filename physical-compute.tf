@@ -28,7 +28,7 @@ resource "null_resource" "tfe_settings_deploy" {
     destination = "/opt/tfe/settings.json"
   }
   provisioner "file" {
-    # Deploy the tfe license from var.tfe_lecense_filepath
+    # Deploy the tfe license from var.tfe_license_filepath
     source      = var.tfe_license_filepath
     destination = "/opt/tfe/license.rli"
   }
