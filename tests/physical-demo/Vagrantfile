@@ -20,6 +20,21 @@ Vagrant.configure("2") do |config|
 	    yum install jq tree -y
 	    rpm -qa | grep -i jq
 	    jq -Version
+	    ## ok now we have some unmet dependacies and it gets a little hacky (note these are not available in https://dl.fedoraproject.org/pub/epel/7/x86_64/Packages/)
+	    # source from centos/os repo
+	    sudo cat > /etc/yum.repos.d/centos-os.repo << EOF
+[centos-os]
+name=Centos os - $basearch
+baseurl=http://mirror.centos.org/centos/7/os/x86_64/
+enabled=1
+gpgcheck=0
+EOF
+
+	    sudo yum install policycoreutils-python
+
+	    # reconfigure SELINUX to permissive, you will need to reboot the host
+	    sed -i s/^SELINUX=enforcing/SELINUX=permissive/g /etc/selinux/config
+	    echo "Once finished reboot the vagrant host"
 	  SHELL
 	end
 	config.vm.define "centos7" do |centos7|
