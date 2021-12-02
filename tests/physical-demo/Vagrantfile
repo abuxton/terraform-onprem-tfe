@@ -30,11 +30,13 @@ enabled=1
 gpgcheck=0
 EOF
 
-	    sudo yum install policycoreutils-python
+	    sudo yum install policycoreutils-python -y
 
 	    # reconfigure SELINUX to permissive, you will need to reboot the host
+	    # https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/using_selinux/changing-selinux-states-and-modes_using-selinux
 	    sed -i s/^SELINUX=enforcing/SELINUX=permissive/g /etc/selinux/config
-	    echo "Once finished reboot the vagrant host"
+	    sudo getenforce
+	    echo "Once finished reboot the vagrant host `vagrant reload`"
 	  SHELL
 	end
 	config.vm.define "centos7" do |centos7|
