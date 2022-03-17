@@ -5,6 +5,27 @@
 # https://www.terraform.io/docs/enterprise/install/automating-the-installer.html#available-settings
 #
 #-------------------------------------------------------------------------------------------------------------------------------------------
+##
+# Compute
+##
+
+variable "physical" {
+  type        = bool
+  default     = true
+  description = "Boolean regarding deployment on physical servers or using a virtualization provider where supported."
+}
+
+##
+# TFE settings
+##
+
+variable "airgap_install" {
+  type        = bool
+  description = "Boolean for TFE installation method to be airgap. Online mode is assumed by default"
+  default     = false
+}
+
+
 variable "tfe_license_filepath" {
   type        = string
   description = "Full filepath of TFE license file (`.rli` file extension). A local filepath or S3 is supported. If s3, the path should start with `s3://`."
@@ -12,17 +33,6 @@ variable "tfe_license_filepath" {
     condition     = fileexists(var.tfe_license_filepath)
     error_message = "You have not provided or the file does not exist or the you do not have sufficient privilages to read the file."
   }
-}
-
-variable "airgap_install" {
-  type        = bool
-  description = "Boolean for TFE installation method to be airgap. Online mode is assumed by default"
-  default     = false
-}
-variable "physical" {
-  type        = bool
-  default     = true
-  description = "Boolean regarding deployment on physical servers or using a virtualization provider where supported."
 }
 
 variable "operational_mode" {
@@ -38,13 +48,21 @@ variable "operational_mode" {
 }
 variable "replicated_bundle_path" {
   type        = string
-  description = "Full path of Replicated bundle (`replicated.tar.gz`). This can be in an S3 bucket or local path to the execution of terraform.  Only specify if `airgap_install` is `true`. "
+  description = "Full path of Replicated bundle (`replicated.tar.gz`) locally to TF executable "
   default     = ""
+	validation {
+    condition     = try(fileexists(var.replicated_bundle_path), var.replicated_bundle_path == "")
+    error_message = "You have not provided or the file does not exist or the you do not have sufficient privilages to read the file."
+  }
 }
 variable "tfe_airgap_bundle_path" {
   type        = string
-  description = "Full path of TFE airgap bundle in S3 bucket or local path to the execution of terraform. Only specify if `airgap_install` is `true`. "
+  description = "Full path of TFE airgap bundle in locally to TF executable."
   default     = ""
+	validation {
+    condition     = try(fileexists(var.tfe_airgap_bundle_path), var.tfe_airgap_bundle_path == "")
+    error_message = "You have not provided or the file does not exist or the you do not have sufficient privilages to read the file."
+  }
 }
 
 variable "tfe_release_sequence" {
@@ -246,12 +264,12 @@ variable "capacity_memory" {
   description = "Maxium amount of memory (MB) that a Terraform Run (Plan/Apply) can consume within TFE."
   default     = "512"
 }
-
-variable "enable_active_active" {
-  type        = bool
-  description = "Boolean to enable TFE Active/Active and in turn deploy Redis cluster."
-  default     = false
-}
+# not available on prem with local physical deployment
+// variable "enable_active_active" {
+//   type        = bool
+//   description = "Boolean to enable TFE Active/Active and in turn deploy Redis cluster."
+//   default     = false
+// }
 
 variable "enable_metrics_collection" {
   type        = bool
