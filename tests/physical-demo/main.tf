@@ -11,5 +11,5 @@ module "tfe" {
   tfe_license_filepath   = var.tfe_license_filepath
   public-address         = var.public-address
   private-address        = var.private-address
-	connection_private_key = var.connection_private_key
+  connection_private_key = var.connection_private_key
 }

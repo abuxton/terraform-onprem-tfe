@@ -38,6 +38,7 @@ EOF
 	    sudo getenforce
 	    echo "Once finished reboot the vagrant host `vagrant reload`"
 	  SHELL
+	  # https://www.cyberciti.biz/faq/how-do-i-determine-rhel-version/
 	end
 	config.vm.define "centos7" do |centos7|
 	  centos7.vm.box = "centos/7"

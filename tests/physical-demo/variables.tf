@@ -18,7 +18,7 @@ variable "private-address" {
 variable "enc_password" {
   type        = string
   description = "Password to protect unseal key and root token of TFE embedded Vault."
-  sensitive   = true
+  #sensitive   = true
 }
 variable "connection_private_key" {
   type        = string

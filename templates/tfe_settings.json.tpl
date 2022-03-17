@@ -1,57 +1,109 @@
 {
-    "aws_access_key_id": {},
-    "aws_instance_profile": {},
-    "aws_secret_access_key": {},
-    "azure_account_key": {},
-    "azure_account_name": {},
-    "azure_container": {},
-    "azure_endpoint": {},
-    "ca_certs": {},
-    "capacity_concurrency": {
-        "value": "10"
-    },
-    "disk_path": {},
-    "enc_password": {
-        "value": "${enc_password}"
-    },
-    "extern_vault_addr": {},
-    "extern_vault_enable": {
-        "value": "0"
-    },
-    "extern_vault_path": {},
-    "extern_vault_role_id": {},
-    "extern_vault_secret_id": {},
-    "extern_vault_token_renew": {},
-    "extra_no_proxy": {},
-    "hostname": {
-        "value": "${hostname}"
-    },
-    "installation_type": %{ if installation_type == "demo" }{
-        "value": "poc"
-    }%{ else }
-       {"value": "${installation_type}"}
-    %{ endif },
-    "placement": {
-        "value": "placement_s3"
-    },
-    "postgres_url": {
-        "value": "REPLACE WITH YOUR POSTGRE URL - EXAMPLE: postgresql://postgres:password@dbserver.customer.com:5432/dbname?sslmode=disable"
-    },
-    "production_type": %{ if production_type != "" }{
-        "value": "${production_type}"
-    }%{ else }{}%{ endif },
-    "s3_bucket": {
-        "value": "REPLACE WITH YOUR S3 BUCKET NAME"
-    },
-    "s3_region": {
-        "value": "REPLACE WITH THE REGION OF YOUR S3 BUCKET. EXAMPLE: us-east-1"
-    },
-    "s3_sse": {},
-    "s3_sse_kms_key_id": {},
-    "vault_path": {
-        "value": "/var/lib/tfe-vault"
-    },
-    "vault_store_snapshot": {
-        "value": "1"
-    }
+  "azure_account_key": {
+    "value": "${azure_account_key}"
+  },
+  "azure_account_name": {
+    "value": "${azure_account_name}"
+  },
+  "azure_container": {
+    "value": "${azure_container}"
+  },
+  "azure_endpoint": {},
+  "backup_token": {},
+  "ca_certs": {
+    "value": "$CA_CERTS"
+  },
+  "capacity_concurrency": {
+      "value": "${capacity_concurrency}"
+  },
+  "capacity_cpus": {},
+  "capacity_memory": {
+      "value": "${capacity_memory}"
+  },
+  "custom_image_tag": {
+    "value": ""
+  },
+  "enable_active_active": {
+    "value": "${enable_active_active}"
+  },
+  "enable_metrics_collection": {
+      "value": "${enable_metrics_collection}"
+  },
+  "enc_password": {
+      "value": $ENC_PASSWORD
+  },
+  "extern_vault_enable": {
+      "value": "0"
+  },
+  "extra_no_proxy": {
+    "value": "${extra_no_proxy}"
+  },
+  "force_tls": {
+    "value": "${force_tls}"
+  },
+  "hairpin_addressing": {
+    "value": "${hairpin_addressing}"
+  },
+  "hostname": {
+      "value": "${hostname}"
+  },
+  "iact_subnet_list": {},
+  "iact_subnet_time_limit": {
+      "value": "60"
+  },
+  "installation_type": {
+      "value": "production"
+  },
+  "log_forwarding_config": {
+    "value": ""
+  },
+  "log_forwarding_enabled": {
+    "value": "${log_forwarding_enabled}"
+  },
+  "pg_dbname": {
+      "value": "${pg_dbname}"
+  },
+  "pg_extra_params": {
+      "value": "${pg_extra_params}"
+  },
+  "pg_netloc": {
+      "value": "${pg_netloc}"
+  },
+  "pg_password": {
+      "value": "${pg_password}"
+  },
+  "pg_user": {
+      "value": "${pg_user}"
+  },
+  "placement": {
+      "value": "placement_azure"
+  },
+  "production_type": {
+      "value": "external"
+  },
+  "redis_host": {
+    "value": ""
+  },
+  "redis_pass": {
+    "value": ""
+  },
+  "redis_port": {
+    "value": ""
+  },
+  "redis_use_password_auth": {
+    "value": ""
+  },
+  "redis_use_tls": {
+    "value": ""
+  },
+  "restrict_worker_metadata_access": {
+    "value": "${restrict_worker_metadata_access}"
+  },
+  "tbw_image": {
+      "value": "${tbw_image}"
+  },
+  "tls_ciphers": {},
+  "tls_vers": {
+      "value": "tls_1_2_tls_1_3"
+  }
 }
