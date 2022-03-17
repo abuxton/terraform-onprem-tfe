@@ -5,9 +5,6 @@ determine_os_distro() {
   local os_distro_name=$(grep "^NAME=" /etc/os-release | cut -d"\"" -f2)
 
   case "$os_distro_name" in
-    "Amazon Linux"*)
-      os_distro="amzn2"
-      ;;
     "Ubuntu"*)
       os_distro="ubuntu"
       ;;
@@ -24,9 +21,6 @@ determine_os_distro() {
 
   echo "$os_distro"
 }
-
-
-
 
 install_docker() {
   local os_distro="$1"
@@ -135,8 +129,8 @@ main() {
   echo "[INFO] Detected OS distro is '$os_distro_result'."
   install_dependencies "${airgap_install}" "$os_distro_result" "${pkg_repos_reachable_with_airgap}" "${install_docker_before}"
 
-  TFE_INSTALLER_DIR=${TFE_INSTALLER_DIR}
-  TFE_CONFIG_DIR=${TFE_CONFIG_DIR}
+  TFE_INSTALLER_DIR=${tfe_install_dir}
+  TFE_CONFIG_DIR=${tfe_config_dir}
   TFE_SETTINGS_PATH="$TFE_CONFIG_DIR/tfe-settings.json"
   TFE_LICENSE_PATH="$TFE_CONFIG_DIR/license.rli"
   TFE_AIRGAP_PATH="$TFE_INSTALLER_DIR/tfe-bundle.airgap"
@@ -165,7 +159,7 @@ main() {
   fi
 
   if [[ "${ca_bundle_secret_path}" != "" ]]; then
-    echo "[INFO] Retrieving custom CA bundle from ${ca_bundle_secret_arn}."
+    $CA_CERTS=$(cat ${TFE_CONFIG_DIR}/certs.ca-bundle)
     # Will be deployed by remote_exec provider
   else
     CA_CERTS=""
