@@ -104,14 +104,7 @@ install_dependencies() {
   fi
 }
 
-# configure_log_forwarding() {
-#   echo "INFO: Configuring Fluent Bit log forwarding"
-#   cat > "$TFE_CONFIG_DIR/fluent-bit.conf" << EOF
-# ${fluent_bit_config}
-# EOF
 
-#   LOG_FORWARDING_CONFIG=$(sed -E ':a;N;$!ba;s/\r{0,1}\n/\\n/g' $TFE_CONFIG_DIR/fluent-bit.conf)
-# }
 
 exit_script() {
   if [[ "$1" == 0 ]]; then
@@ -128,7 +121,6 @@ main() {
   os_distro_result=$(determine_os_distro)
   echo "[INFO] Detected OS distro is '$os_distro_result'."
   install_dependencies "${airgap_install}" "$os_distro_result" "${pkg_repos_reachable_with_airgap}" "${install_docker_before}"
-
   TFE_INSTALLER_DIR=${tfe_install_dir}
   TFE_CONFIG_DIR=${tfe_config_dir}
   TFE_SETTINGS_PATH="$TFE_CONFIG_DIR/tfe-settings.json"
@@ -154,25 +146,17 @@ main() {
     # Will be deployed by remote_exec provider
   fi
 
-  if [[ "${tfe_privkey_secret_path}" != "" ]]; then
+  if [[ "${tfe_cert_privkey_path}" != "" ]]; then
     # Will be deployed by remote_exec provider
   fi
 
-  if [[ "${ca_bundle_secret_path}" != "" ]]; then
-    $CA_CERTS=$(cat ${TFE_CONFIG_DIR}/certs.ca-bundle)
+  if [[ "${tfe_ca_bundle_path}" != "" ]]; then
+    $CA_CERTS=$(cat $TFE_CONFIG_DIR/certs.ca-bundle)
     # Will be deployed by remote_exec provider
   else
     CA_CERTS=""
   fi
 
-
-  # enable & configure log forwarding with Fluent Bit
-  # https://www.terraform.io/docs/enterprise/admin/logging.html#enable-log-forwarding
-  # if [[ "${log_forwarding_enabled}" == "1" ]]; then
-  #   configure_log_forwarding
-  # else
-  #   LOG_FORWARDING_CONFIG=""
-  # fi
 
   # generate Replicated config file
   # https://help.replicated.com/docs/native/customer-installations/automating/
@@ -229,7 +213,7 @@ EOF
   },
   "disk_path": {},
   "enable_active_active": {
-    "value": "${enable_active_active}"
+    "value": "0"
   },
   "enable_metrics_collection": {
       "value": "${enable_metrics_collection}"
@@ -284,62 +268,53 @@ EOF
       "value": "${metrics_endpoint_port_https}"
   },
   "pg_dbname": {
-      "value": "${pg_dbname}"
+      "value": ""
   },
   "pg_extra_params": {
       "value": "sslmode=require"
   },
   "pg_netloc": {
-      "value": "${pg_netloc}"
+      "value": ""
   },
   "pg_password": {
-      "value": "${pg_password}"
+      "value": ""
   },
   "pg_user": {
-      "value": "${pg_user}"
+      "value": ""
   },
   "placement": {
-      "value": "placement_s3"
+      "value": ""
   },
   "production_type": {
-      "value": "external"
+      "value": "${production_type}"
   },
   "redis_host": {
-    "value": "${redis_host}"
+    "value": ""
   },
   "redis_pass": {
-    "value": "${redis_pass}"
+    "value": ""
   },
   "redis_port": {
-    "value": "${redis_port}"
+    "value": ""
   },
   "redis_use_password_auth": {
-    "value": "${redis_use_password_auth}"
+    "value": ""
   },
   "redis_use_tls": {
-    "value": "${redis_use_tls}"
+    "value": ""
   },
   "restrict_worker_metadata_access": {
     "value": "${restrict_worker_metadata_access}"
   },
   "s3_bucket": {
-      "value": "${s3_app_bucket_name}"
+      "value": ""
   },
   "s3_endpoint": {},
   "s3_region": {
-      "value": "${s3_app_bucket_region}"
+      "value": ""
   },
-%{ if kms_key_arn != "" ~}
-  "s3_sse": {
-      "value": "aws:kms"
-  },
-  "s3_sse_kms_key_id": {
-      "value": "${kms_key_arn}"
-  },
-%{ else ~}
   "s3_sse": {},
   "s3_sse_kms_key_id": {},
-%{ endif ~}
   "tbw_image": {
       "value": "${tbw_image}"
   },
@@ -372,14 +347,11 @@ EOF
 %{ if extra_no_proxy != "" ~}
     additional-no-proxy=${extra_no_proxy} \
 %{ endif ~}
-%{ if enable_active_active == 1 ~}
-    disable-replicated-ui \
-%{ endif ~}
 %{ if install_docker_before == true ~}
     no-docker \
 %{ endif ~}
     private-address=${private_ip} \
-    public-address=${public_IP}
+    public-address=${public_ip}
 
   # docker pull custom tbw image if a custom image tag was provided
   if [[ ${tbw_image} == "custom_image" && ${custom_image_tag} != "hashicorp/build-worker:now" ]]; then

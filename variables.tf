@@ -6,6 +6,13 @@
 #
 #-------------------------------------------------------------------------------------------------------------------------------------------
 ##
+# debug switch
+##
+variable "verbose" {
+  default = false
+  type    = bool
+}
+##
 # Compute
 ##
 
@@ -41,9 +48,10 @@ variable "tfe_license_filepath" {
   type        = string
   description = "Full filepath of TFE license file (`.rli` file extension). A local filepath or S3 is supported. If s3, the path should start with `s3://`."
   validation {
-    condition     = fileexists(var.tfe_license_filepath)
+    condition     = try(fileexists(var.tfe_license_filepath), var.tfe_license_filepath == "")
     error_message = "You have not provided or the file does not exist or the you do not have sufficient privilages to read the file."
   }
+  default = ""
 }
 
 variable "operational_mode" {
@@ -84,17 +92,19 @@ variable "tfe_release_sequence" {
 variable "console_password" {
   type        = string
   description = "Password to unlock TFE Admin Console accessible via port 8800."
-  #sensitive   = true
+  sensitive   = true
+  default     = ""
 }
 
 variable "enc_password" {
   type        = string
   description = "Password to protect unseal key and root token of TFE embedded Vault."
-  #sensitive   = true
+  default     = ""
+  sensitive   = true
 }
 variable "remove_import_settings_from" {
   type        = bool
-  description = "Replicated setting to automatically remove the `/etc/tfe-settings.json` file (referred to as `ImportSettingsFrom` by Replicated) after installation."
+  description = "Replicated setting to automatically remove the file (referred to as `ImportSettingsFrom` by Replicated) after installation."
   default     = false
 }
 
@@ -137,12 +147,6 @@ variable "capacity_memory" {
   default     = "512"
 }
 
-variable "enable_metrics_collection" {
-  type        = bool
-  description = "Boolean to enable internal TFE metrics collection."
-  default     = true
-}
-
 variable "force_tls" {
   type        = bool
   description = "Boolean to require all internal TFE application traffic to use HTTPS by sending a 'Strict-Transport-Security' header value in responses, and marking cookies as secure. Only enable if `tls_bootstrap_type` is `server-path`."
@@ -164,11 +168,6 @@ variable "extra_no_proxy" {
   description = "A comma-separated string of hostnames or IP addresses to add to the TFE no_proxy list. Only specify if a value for `http_proxy` is also specified."
   default     = ""
 }
-variable "syslog_endpoint" {
-  type        = string
-  description = "Syslog endpoint for Logspout to forward TFE logs to."
-  default     = ""
-}
 
 variable "hairpin_addressing" {
   type        = bool
@@ -179,6 +178,7 @@ variable "hairpin_addressing" {
 variable "public-address" {
   type        = string
   description = "public IP address for the TFE installer, can be 127.0.0.1"
+  default     = "127.0.0.1"
 }
 variable "private-address" {
   type        = string
@@ -258,16 +258,38 @@ variable "tfe_fqdn" {
   description = "Hostname/FQDN of TFE instance. This name should resolve to the load balancer IP address and will be how clients should access TFE."
 }
 
-variable "log_forwarding_enabled" {
-  type        = bool
-  description = "Boolean to enable the TFE log forwarding application feature."
-  default     = false
-}
-
 variable "restrict_worker_metadata_access" {
   type        = bool
   description = "Boolean to block Terraform build worker containers' ability to access VM instance metadata endpoint."
   default     = false
+}
+
+variable "tfe_ca_bundle_path" {
+  type        = string
+  description = "Path to ca_bundle file on local disk."
+  default     = ""
+  validation {
+    condition     = try(fileexists(var.tfe_ca_bundle_path), var.tfe_ca_bundle_path == "")
+    error_message = "You have not provided or the file does not exist or the you do not have sufficient privilages to read the file."
+  }
+}
+variable "tfe_cert_secret_path" {
+  type        = string
+  description = "Required if `tls_bootstrap_type` is `server-path`; otherwise ignored."
+  default     = ""
+  validation {
+    condition     = try(fileexists(var.tfe_cert_secret_path), var.tfe_cert_secret_path == "")
+    error_message = "You have not provided or the file does not exist or the you do not have sufficient privilages to read the file."
+  }
+}
+variable "tfe_cert_privkey_path" {
+  type        = string
+  description = "Required if `tls_bootstrap_type` is `server-path`; otherwise ignored."
+  default     = ""
+  validation {
+    condition     = try(fileexists(var.tfe_cert_privkey_path), var.tfe_cert_privkey_path == "")
+    error_message = "You have not provided or the file does not exist or the you do not have sufficient privilages to read the file."
+  }
 }
 
 
