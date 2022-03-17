@@ -16,15 +16,12 @@ resource "null_resource" "tfe_install_deploy" {
       "sudo chmod 0777 ${var.tfe_install_dir}"
     ]
   }
-  provisioner "file" {
-    content     = templatefile("${path.module}/templates/tfe_user_data.sh.tpl", local.user_data_args)
-    destination = "${var.tfe_install_dir}/tfe_user_data.sh"
-  }
+
   # TODO https://www.terraform.io/docs/language/resources/provisioners/syntax.html#destroy-time-provisioners
 }
 
-resource "null_resource" "online_demo" {
-  count = var.airgap_install == false ? 1 : 0
+resource "null_resource" "replicated_default" {
+  count = var.airgap_install == false ? var.replicated_install == true ? 1 : 0 : 0
   connection {
     type        = "ssh"
     user        = var.connection_user
@@ -32,10 +29,17 @@ resource "null_resource" "online_demo" {
     host        = var.tfe_hostname
     port        = var.connection_port
   }
+  provisioner "file" {
+    content = templatefile("${path.module}/templates/replicated_install.sh.tpl", {
+      public-address  = local.user_data_args.public_ip,
+      private-address = local.user_data_args.private_ip
+    })
+    destination = "${var.tfe_install_dir}/replicated_install.sh"
+  }
   provisioner "remote-exec" {
     inline = [
-      "chmod +x ${var.tfe_install_dir}/tfe_user_data.sh",
-      "sudo ${var.tfe_install_dir}/tfe_user_data.sh",
+      "chmod +x ${var.tfe_install_dir}/replicated_install.sh",
+      "sudo ${var.tfe_install_dir}/replicated_install.sh",
     ]
   }
   depends_on = [
@@ -43,7 +47,7 @@ resource "null_resource" "online_demo" {
   ]
 }
 
-resource "null_resource" "airgap_install" {
+resource "null_resource" "demo_install" {
   count = var.airgap_install == true ? 1 : 0
   connection {
     type        = "ssh"
@@ -57,11 +61,16 @@ resource "null_resource" "airgap_install" {
     source      = var.tfe_license_filepath
     destination = "${var.tfe_install_dir}/license.rli"
   }
+
   // provisioner "file" {
   //   # Deploy the certs, key, cert and ca_bundle
   //   source      = var.tfe_license_filepath
   //   destination = "${var.tfe_install_dir}/license.rli"
   // }
+	provisioner "file" {
+    content     = templatefile("${path.module}/templates/tfe_user_data.sh.tpl", local.user_data_args)
+    destination = "${var.tfe_install_dir}/tfe_user_data.sh"
+  }
   provisioner "remote-exec" {
     inline = [
       "chmod +x ${var.tfe_install_dir}/tfe_user_data.sh",

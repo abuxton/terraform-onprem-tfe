@@ -21,7 +21,11 @@ variable "physical" {
   default     = true
   description = "Boolean regarding deployment on physical servers or using a virtualization provider where supported."
 }
-
+variable "replicated_install" {
+  type        = bool
+  default     = true
+  description = "Boolean regarding deployment of just replicated for demo purposes"
+}
 variable "tfe_install_dir" {
   type        = string
   default     = "/opt/tfe/installer"

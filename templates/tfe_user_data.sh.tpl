@@ -132,9 +132,9 @@ main() {
   mkdir -p $TFE_INSTALLER_DIR
 
 
-  if [[ "${airgap_install}" == "true" ]]; then
-    # install script will be deployed by remote_exec provider
-
+  if [[ "${airgap_install}" == "true" ]];
+	then
+   echo "install script will be deployed by remote_exec provider"
   else
     # retrieve 'install.sh' script for 'online' install
     echo "[INFO] Retrieving TFE install script directly from Replicated."
@@ -143,16 +143,16 @@ main() {
 
   # optionally retrieve certs
   if [[ "${tfe_cert_secret_path}" != "" ]]; then
-    # Will be deployed by remote_exec provider
+    echo "certs be deployed by remote_exec provider"
   fi
 
   if [[ "${tfe_cert_privkey_path}" != "" ]]; then
-    # Will be deployed by remote_exec provider
+    echo "certs be deployed by remote_exec provider"
   fi
 
   if [[ "${tfe_ca_bundle_path}" != "" ]]; then
     $CA_CERTS=$(cat $TFE_CONFIG_DIR/certs.ca-bundle)
-    # Will be deployed by remote_exec provider
+    echo "certs be deployed by remote_exec provider"
   else
     CA_CERTS=""
   fi
@@ -363,7 +363,7 @@ EOF
   sleep 60
 
   echo "[INFO] Polling TFE health check endpoint until app becomes ready..."
-  while ! curl -ksfS --connect-timeout 5 https://$(private_ip}/_health_check; do
+  while ! curl -ksfS --connect-timeout 5 https://${private_ip}/_health_check; do
     sleep 5
   done
 

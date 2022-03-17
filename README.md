@@ -1,48 +1,27 @@
 # TFE onPrem
 This Terraform module accelerator deploys TFE onPrem whether virtualized (VMware) or on physical `tin` servers in what is referred to as a `Standalone Deployment`.
 
- There are a number of different _deployment scenarios_ supported; see the [Examples](###Examples) section for further details supporting the various [Operational Modes](https://www.terraform.io/docs/enterprise/before-installing/index.html#operational-mode-decision)
- - TODO External Service
+ There are a number of different _deployment scenarios_ supported; see the [examples](###Examples) section for further details supporting the various [Operational Modes](https://www.terraform.io/docs/enterprise/before-installing/index.html#operational-mode-decision)
+
+ - TODO Demo
  - TODO Mounted Disc
- - TODO demo
-  and Deployment
+ - TODO external service
 
  The module code should be reviewed, potentially tweaked/customized, and **tested in a non-production environment**.
 <p>&nbsp;</p>
 
-
 ## Prerequisites
 - Terraform >= 0.14 installed on clients/workstations
-
-TODO
-<p>&nbsp;</p>
-
-
 ## Getting Started
 
 You should review the [Terraform Enterprise Pre-Install Checklist](https://www.terraform.io/docs/enterprise/before-installing/index.html) before you start as this identifies pre-requisites and service decisions, that may be required before you begin.
 
-A good place to start is with one of the [examples](./examples/README.md) which in turn will link to a _deployment scenario_ nested within the [tests](./tests) directory. The deployment scenarios contain actual Terraform code that can be referenced and deployed after populating a `terraform.tfvars`.
-The "happy path" scenario that is probably the quickest and easiest to deploy and manage can be found [here](./tests/TODO). The input variable default values of the module favor this scenario.
+A good place to start is with one of the [tests](./tests/README.md) which in turn will link to a _deployment scenario_ nested within the [tests](./tests) directory. The deployment scenarios contain actual Terraform code that can be referenced and deployed after populating a `terraform.tfvars`.
 
-<p>&nbsp;</p>
-
+The "happy path" scenario that is probably the quickest and easiest to deploy and manage can be found [here](./tests/default). The input variable default values of the module favor this scenario.
 
 ## Usage
 
-The bare minium usage regarding modules and providers in this module
-``` json
-# ./providers.tf
-terraform {
-  required_providers {
-    template = {
-      source = "hashicorp/template"
-      version = ">= 2.2.0"
-    }
-  }
-}
-
-provider "template" {
   # Configuration options
 }
 
@@ -166,7 +145,7 @@ No requirements.
 
 | Name | Version |
 |------|---------|
-| <a name="provider_null"></a> [null](#provider\_null) | 3.1.0 |
+| <a name="provider_null"></a> [null](#provider\_null) | 3.1.1 |
 
 ## Modules
 
@@ -176,9 +155,9 @@ No modules.
 
 | Name | Type |
 |------|------|
-| [null_resource.replicated_conf_deploy](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
-| [null_resource.replicated_install](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
-| [null_resource.tfe_settings_deploy](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
+| [null_resource.airgap_install](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
+| [null_resource.online_demo](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
+| [null_resource.tfe_install_deploy](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
 
 ## Inputs
 
@@ -188,34 +167,44 @@ No modules.
 | <a name="input_capacity_concurrency"></a> [capacity\_concurrency](#input\_capacity\_concurrency) | Total concurrent Terraform Runs (Plans/Applies) allowed within TFE. | `string` | `"10"` | no |
 | <a name="input_capacity_memory"></a> [capacity\_memory](#input\_capacity\_memory) | Maxium amount of memory (MB) that a Terraform Run (Plan/Apply) can consume within TFE. | `string` | `"512"` | no |
 | <a name="input_connection_port"></a> [connection\_port](#input\_connection\_port) | SSH port provided in string `ssh <connection_user>@127.0.0.1 -p <connection_port>` defaults to 22. | `string` | `"22"` | no |
-| <a name="input_connection_private_key"></a> [connection\_private\_key](#input\_connection\_private\_key) | path to private key for ssh, password is not supported | `string` | `""` | no |
+| <a name="input_connection_private_key"></a> [connection\_private\_key](#input\_connection\_private\_key) | path to private key for ssh, password is not supported. #if using vagrant TFE validate will fail if the host is not up and ssh key not present | `string` | `""` | no |
 | <a name="input_connection_user"></a> [connection\_user](#input\_connection\_user) | user id for ssh key provided in string `ssh <connection_user>@127.0.0.1` defaults to root. | `string` | `"root"` | no |
-| <a name="input_console_password"></a> [console\_password](#input\_console\_password) | Password to unlock TFE Admin Console accessible via port 8800. | `string` | n/a | yes |
+| <a name="input_console_password"></a> [console\_password](#input\_console\_password) | Password to unlock TFE Admin Console accessible via port 8800. | `string` | `""` | no |
 | <a name="input_custom_tbw_image_tag"></a> [custom\_tbw\_image\_tag](#input\_custom\_tbw\_image\_tag) | Tag of custom Terraform Build Worker (tbw) image. Examples: `v1`, `latest`. Only specify if `tbw_image` is set to `custom_image`. | `string` | `"latest"` | no |
 | <a name="input_custom_tbw_repo"></a> [custom\_tbw\_repo](#input\_custom\_tbw\_repo) | Name of Repository where custom Terraform Build Worker (tbw) image exists. Only specify if `tbw_image` is set to `custom_image`. | `string` | `""` | no |
-| <a name="input_enable_metrics_collection"></a> [enable\_metrics\_collection](#input\_enable\_metrics\_collection) | Boolean to enable internal TFE metrics collection. | `bool` | `true` | no |
-| <a name="input_enc_password"></a> [enc\_password](#input\_enc\_password) | Password to protect unseal key and root token of TFE embedded Vault. | `string` | n/a | yes |
+| <a name="input_enc_password"></a> [enc\_password](#input\_enc\_password) | Password to protect unseal key and root token of TFE embedded Vault. | `string` | `""` | no |
 | <a name="input_extra_no_proxy"></a> [extra\_no\_proxy](#input\_extra\_no\_proxy) | A comma-separated string of hostnames or IP addresses to add to the TFE no\_proxy list. Only specify if a value for `http_proxy` is also specified. | `string` | `""` | no |
 | <a name="input_force_tls"></a> [force\_tls](#input\_force\_tls) | Boolean to require all internal TFE application traffic to use HTTPS by sending a 'Strict-Transport-Security' header value in responses, and marking cookies as secure. Only enable if `tls_bootstrap_type` is `server-path`. | `bool` | `false` | no |
 | <a name="input_hairpin_addressing"></a> [hairpin\_addressing](#input\_hairpin\_addressing) | Boolean to enable TFE services to direct requests to the servers' internal IP address rather than the TFE hostname/FQDN. Only enable if `tls_bootstrap_type` is `server-path`. | `bool` | `false` | no |
 | <a name="input_http_proxy"></a> [http\_proxy](#input\_http\_proxy) | Proxy address to configure for TFE to use for outbound connections/requests. | `string` | `""` | no |
+| <a name="input_install_docker_before"></a> [install\_docker\_before](#input\_install\_docker\_before) | Boolean to install docker before TFE install script is called. | `bool` | `false` | no |
 | <a name="input_operational_mode"></a> [operational\_mode](#input\_operational\_mode) | Operational mode has https://www.terraform.io/docs/enterprise/before-installing/index.html#operational-mode-decision, must be one of Demo(default), mounted, or external | `string` | `"demo"` | no |
 | <a name="input_os_distro"></a> [os\_distro](#input\_os\_distro) | Linux OS distribution for TFE EC2 instance. Choose from `ubuntu`, `rhel`, `centos`. | `string` | `"ubuntu"` | no |
 | <a name="input_physical"></a> [physical](#input\_physical) | Boolean regarding deployment on physical servers or using a virtualization provider where supported. | `bool` | `true` | no |
+| <a name="input_pkg_repos_reachable_with_airgap"></a> [pkg\_repos\_reachable\_with\_airgap](#input\_pkg\_repos\_reachable\_with\_airgap) | Boolean to install prereq software dependencies even if airgapped. Only valid when `airgap_install` is `true`. | `bool` | `false` | no |
 | <a name="input_private-address"></a> [private-address](#input\_private-address) | private IP address for TFE installer script | `string` | `"127.0.0.1"` | no |
-| <a name="input_public-address"></a> [public-address](#input\_public-address) | public IP address for the TFE installer, can be 127.0.0.1 | `string` | n/a | yes |
-| <a name="input_remove_import_settings_from"></a> [remove\_import\_settings\_from](#input\_remove\_import\_settings\_from) | Replicated setting to automatically remove the `/etc/tfe-settings.json` file (referred to as `ImportSettingsFrom` by Replicated) after installation. | `bool` | `false` | no |
-| <a name="input_replicated_bundle_path"></a> [replicated\_bundle\_path](#input\_replicated\_bundle\_path) | Full path of Replicated bundle (`replicated.tar.gz`). This can be in an S3 bucket or local path to the execution of terraform.  Only specify if `airgap_install` is `true`. | `string` | `""` | no |
-| <a name="input_syslog_endpoint"></a> [syslog\_endpoint](#input\_syslog\_endpoint) | Syslog endpoint for Logspout to forward TFE logs to. | `string` | `""` | no |
+| <a name="input_public-address"></a> [public-address](#input\_public-address) | public IP address for the TFE installer, can be 127.0.0.1 | `string` | `"127.0.0.1"` | no |
+| <a name="input_remove_import_settings_from"></a> [remove\_import\_settings\_from](#input\_remove\_import\_settings\_from) | Replicated setting to automatically remove the file (referred to as `ImportSettingsFrom` by Replicated) after installation. | `bool` | `false` | no |
+| <a name="input_replicated_bundle_path"></a> [replicated\_bundle\_path](#input\_replicated\_bundle\_path) | Full path of Replicated bundle (`replicated.tar.gz`) locally to TF executable | `string` | `""` | no |
+| <a name="input_restrict_worker_metadata_access"></a> [restrict\_worker\_metadata\_access](#input\_restrict\_worker\_metadata\_access) | Boolean to block Terraform build worker containers' ability to access VM instance metadata endpoint. | `bool` | `false` | no |
 | <a name="input_tbw_image"></a> [tbw\_image](#input\_tbw\_image) | Terraform Build Worker container image to use. Set this to `custom_image` to use alternative container image. | `string` | `"default_image"` | no |
-| <a name="input_tfe_airgap_bundle_path"></a> [tfe\_airgap\_bundle\_path](#input\_tfe\_airgap\_bundle\_path) | Full path of TFE airgap bundle in S3 bucket or local path to the execution of terraform. Only specify if `airgap_install` is `true`. | `string` | `""` | no |
+| <a name="input_tfe_airgap_bundle_path"></a> [tfe\_airgap\_bundle\_path](#input\_tfe\_airgap\_bundle\_path) | Full path of TFE airgap bundle in locally to TF executable. | `string` | `""` | no |
+| <a name="input_tfe_ca_bundle_path"></a> [tfe\_ca\_bundle\_path](#input\_tfe\_ca\_bundle\_path) | Path to ca\_bundle file on local disk. | `string` | `""` | no |
+| <a name="input_tfe_cert_privkey_path"></a> [tfe\_cert\_privkey\_path](#input\_tfe\_cert\_privkey\_path) | Required if `tls_bootstrap_type` is `server-path`; otherwise ignored. | `string` | `""` | no |
+| <a name="input_tfe_cert_secret_path"></a> [tfe\_cert\_secret\_path](#input\_tfe\_cert\_secret\_path) | Required if `tls_bootstrap_type` is `server-path`; otherwise ignored. | `string` | `""` | no |
+| <a name="input_tfe_config_dir"></a> [tfe\_config\_dir](#input\_tfe\_config\_dir) | LFS path to where config files will be extracted and deployed | `string` | `"/etc/"` | no |
+| <a name="input_tfe_fqdn"></a> [tfe\_fqdn](#input\_tfe\_fqdn) | Hostname/FQDN of TFE instance. This name should resolve to the load balancer IP address and will be how clients should access TFE. | `string` | n/a | yes |
 | <a name="input_tfe_hostname"></a> [tfe\_hostname](#input\_tfe\_hostname) | Hostname/FQDN of TFE instance. This name should resolve to the load balancer DNS name and will be how users and systems access TFE. | `string` | n/a | yes |
-| <a name="input_tfe_license_filepath"></a> [tfe\_license\_filepath](#input\_tfe\_license\_filepath) | Full filepath of TFE license file (`.rli` file extension). A local filepath or S3 is supported. If s3, the path should start with `s3://`. | `string` | n/a | yes |
+| <a name="input_tfe_install_dir"></a> [tfe\_install\_dir](#input\_tfe\_install\_dir) | LFS path to where all install artifacts will be created or deployed. | `string` | `"/opt/tfe/installer"` | no |
+| <a name="input_tfe_license_filepath"></a> [tfe\_license\_filepath](#input\_tfe\_license\_filepath) | Full filepath of TFE license file (`.rli` file extension). A local filepath or S3 is supported. If s3, the path should start with `s3://`. | `string` | `""` | no |
 | <a name="input_tfe_release_sequence"></a> [tfe\_release\_sequence](#input\_tfe\_release\_sequence) | TFE application version release sequence number within Replicated. Ignored if `airgap_install` is `true`. | `number` | `0` | no |
+| <a name="input_tls_bootstrap_type"></a> [tls\_bootstrap\_type](#input\_tls\_bootstrap\_type) | Defines how/where TLS/SSL is terminated. Set to `server-path` when using a layer 4 TCP load balancer to terminate at the instance-level. | `string` | `"server-path"` | no |
+| <a name="input_verbose"></a> [verbose](#input\_verbose) | ------------------------------------------------------------------------------------------------------------------------------------------- Terraform related configuration variables https://www.terraform.io/docs/enterprise/install/automating-the-installer.html#application-settings https://help.replicated.com/docs/swarm/customer-installations/automating/ https://www.terraform.io/docs/enterprise/install/automating-the-installer.html#available-settings  ------------------------------------------------------------------------------------------------------------------------------------------- # debug switch # | `bool` | `false` | no |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
 | <a name="output_tfe_replicated_console_url"></a> [tfe\_replicated\_console\_url](#output\_tfe\_replicated\_console\_url) | n/a |
+| <a name="output_tfe_user_data"></a> [tfe\_user\_data](#output\_tfe\_user\_data) | n/a |
 <!-- END_TF_DOCS -->
