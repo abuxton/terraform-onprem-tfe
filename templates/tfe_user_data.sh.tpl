@@ -104,14 +104,14 @@ install_dependencies() {
   fi
 }
 
-configure_log_forwarding() {
-  echo "INFO: Configuring Fluent Bit log forwarding"
-  cat > "$TFE_CONFIG_DIR/fluent-bit.conf" << EOF
-${fluent_bit_config}
-EOF
+# configure_log_forwarding() {
+#   echo "INFO: Configuring Fluent Bit log forwarding"
+#   cat > "$TFE_CONFIG_DIR/fluent-bit.conf" << EOF
+# ${fluent_bit_config}
+# EOF
 
-  LOG_FORWARDING_CONFIG=$(sed -E ':a;N;$!ba;s/\r{0,1}\n/\\n/g' $TFE_CONFIG_DIR/fluent-bit.conf)
-}
+#   LOG_FORWARDING_CONFIG=$(sed -E ':a;N;$!ba;s/\r{0,1}\n/\\n/g' $TFE_CONFIG_DIR/fluent-bit.conf)
+# }
 
 exit_script() {
   if [[ "$1" == 0 ]]; then
@@ -168,11 +168,11 @@ main() {
 
   # enable & configure log forwarding with Fluent Bit
   # https://www.terraform.io/docs/enterprise/admin/logging.html#enable-log-forwarding
-  if [[ "${log_forwarding_enabled}" == "1" ]]; then
-    configure_log_forwarding
-  else
-    LOG_FORWARDING_CONFIG=""
-  fi
+  # if [[ "${log_forwarding_enabled}" == "1" ]]; then
+  #   configure_log_forwarding
+  # else
+  #   LOG_FORWARDING_CONFIG=""
+  # fi
 
   # generate Replicated config file
   # https://help.replicated.com/docs/native/customer-installations/automating/

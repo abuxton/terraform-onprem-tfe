@@ -18,7 +18,6 @@ locals {
     tfe_hostname                    = var.tfe_hostname
     tbw_image                       = var.tbw_image
     custom_tbw_ecr_repo_uri         = var.custom_tbw_ecr_repo != "" ? data.aws_ecr_repository.custom_tbw_image[0].repository_url : ""
-    custom_image_tag                = local.custom_image_tag
     capacity_concurrency            = var.capacity_concurrency
     capacity_memory                 = var.capacity_memory
     enable_metrics_collection       = var.enable_metrics_collection == true ? 1 : 0
@@ -26,8 +25,5 @@ locals {
     metrics_endpoint_port_http      = var.metrics_endpoint_port_http
     metrics_endpoint_port_https     = var.metrics_endpoint_port_https
     force_tls                       = var.force_tls == true ? 1 : 0
-    log_forwarding_enabled          = var.log_forwarding_enabled == true ? 1 : 0
-    log_forwarding_type             = var.log_forwarding_type
-    fluent_bit_config               = local.fluent_bit_config
   }
 }
