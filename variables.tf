@@ -22,7 +22,7 @@ variable "tfe_install_dir" {
 }
 variable "tfe_config_dir" {
   type        = string
-  default     = "/etc/replicated"
+  default     = "/etc/"
   description = "LFS path to where config files will be extracted and deployed"
 }
 
@@ -61,7 +61,7 @@ variable "replicated_bundle_path" {
   type        = string
   description = "Full path of Replicated bundle (`replicated.tar.gz`) locally to TF executable "
   default     = ""
-	validation {
+  validation {
     condition     = try(fileexists(var.replicated_bundle_path), var.replicated_bundle_path == "")
     error_message = "You have not provided or the file does not exist or the you do not have sufficient privilages to read the file."
   }
@@ -70,7 +70,7 @@ variable "tfe_airgap_bundle_path" {
   type        = string
   description = "Full path of TFE airgap bundle in locally to TF executable."
   default     = ""
-	validation {
+  validation {
     condition     = try(fileexists(var.tfe_airgap_bundle_path), var.tfe_airgap_bundle_path == "")
     error_message = "You have not provided or the file does not exist or the you do not have sufficient privilages to read the file."
   }
@@ -235,18 +235,6 @@ variable "install_docker_before" {
   default     = false
 }
 
-variable "airgap_install" {
-  type        = bool
-  description = "Boolean for TFE installation method to be airgap."
-  default     = false
-}
-
-variable "tfe_release_sequence" {
-  type        = number
-  description = "TFE application release version to install. Only valid when `airgap_install` is `false`. Leaving at `0` will default to latest but is not recommended."
-  default     = 0
-}
-
 variable "tls_bootstrap_type" {
   type        = string
   description = "Defines how/where TLS/SSL is terminated. Set to `server-path` when using a layer 4 TCP load balancer to terminate at the instance-level."
@@ -258,53 +246,12 @@ variable "tls_bootstrap_type" {
   }
 }
 
-variable "remove_import_settings_from" {
-  type        = bool
-  description = "Boolean to automatically delete `/etc/tfe-settings.json` config file (referred to as `ImportSettingsFrom` by Replicated) after installation."
-  default     = false
-}
-
-variable "capacity_concurrency" {
-  type        = string
-  description = "Total concurrent Terraform Runs (Plans/Applies) allowed within TFE."
-  default     = "10"
-}
-
-variable "capacity_memory" {
-  type        = string
-  description = "Maxium amount of memory (MB) that a Terraform Run (Plan/Apply) can consume within TFE."
-  default     = "512"
-}
 # not available on prem with local physical deployment
 // variable "enable_active_active" {
 //   type        = bool
 //   description = "Boolean to enable TFE Active/Active and in turn deploy Redis cluster."
 //   default     = false
 // }
-
-variable "enable_metrics_collection" {
-  type        = bool
-  description = "Boolean to enable internal TFE metrics collection."
-  default     = true
-}
-
-variable "extra_no_proxy" {
-  type        = string
-  description = "A comma-separated string of hostnames or IP addresses to add to the TFE no_proxy list. Only set if a value for `http_proxy` is also set."
-  default     = ""
-}
-
-variable "force_tls" {
-  type        = bool
-  description = "Boolean to require all internal TFE application traffic to use HTTPS by sending a 'Strict-Transport-Security' header value in responses, and marking cookies as secure. Only enable if `tls_bootstrap_type` is `server-path`."
-  default     = false
-}
-
-variable "hairpin_addressing" {
-  type        = bool
-  description = "Boolean to enable TFE services to direct requests to the servers' internal IP address rather than the TFE hostname/FQDN. Only enable if `tls_bootstrap_type` is `server-path`."
-  default     = false
-}
 
 variable "tfe_fqdn" {
   type        = string
@@ -323,19 +270,5 @@ variable "restrict_worker_metadata_access" {
   default     = false
 }
 
-variable "tbw_image" {
-  type        = string
-  description = "Terraform Build Worker container image to use. Set this to `custom_image` to use alternative container image."
-  default     = "default_image"
 
-  validation {
-    condition     = contains(["default_image", "custom_image"], var.tbw_image)
-    error_message = "Value must be `default_image` or `custom_image`."
-  }
-}
 
-variable "http_proxy" {
-  type        = string
-  description = "Proxy address for TFE to use for outbound connections/requests."
-  default     = null
-}
