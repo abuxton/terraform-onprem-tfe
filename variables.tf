@@ -15,6 +15,17 @@ variable "physical" {
   description = "Boolean regarding deployment on physical servers or using a virtualization provider where supported."
 }
 
+variable "tfe_install_dir" {
+  type        = string
+  default     = "/opt/tfe/installer"
+  description = "LFS path to where all install artifacts will be created or deployed."
+}
+variable "tfe_config_dir" {
+  type        = string
+  default     = "/etc/replicated"
+  description = "LFS path to where config files will be extracted and deployed"
+}
+
 ##
 # TFE settings
 ##
