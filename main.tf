@@ -46,7 +46,7 @@ resource "null_resource" "replicated_default" {
   ]
 }
 resource "null_resource" "deploy_certs" {
-  count = var.tfe_cert_privkey_path ? var.tfe_cert_secret_path ? 1 : 0 : 0
+  count = var.tfe_cert_privkey_path != "" ? var.tfe_cert_secret_path != "" ? 1 : 0 : 0
   connection {
     type        = "ssh"
     user        = var.connection_user
@@ -67,7 +67,7 @@ resource "null_resource" "deploy_certs" {
 }
 
 resource "null_resource" "deploy_license" {
-  count = var.tfe_license_filepath ? 1 : 0
+  count = var.tfe_license_filepath != "" ? 1 : 0
   connection {
     type        = "ssh"
     user        = var.connection_user

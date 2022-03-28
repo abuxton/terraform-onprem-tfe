@@ -1,5 +1,5 @@
 resource "null_resource" "online_install" {
-  count = var.airgap_install == false ? var.replicated_install ? 0 : 1 : 0
+  count = var.airgap_install == false ? var.replicated_install != true ? 1 : 0 : 0
   connection {
     type        = "ssh"
     user        = var.connection_user

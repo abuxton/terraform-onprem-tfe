@@ -8,7 +8,7 @@ variable "verbose" {
 variable "public-address" {
   type        = string
   description = "public IP address for the TFE installer, can be 127.0.0.1"
-	default     = "127.0.0.1"
+  default     = "127.0.0.1"
 }
 variable "private-address" {
   type        = string
