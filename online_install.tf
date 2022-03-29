@@ -30,5 +30,6 @@ resource "null_resource" "online_install" {
   }
   depends_on = [
     null_resource.tfe_install_deploy,
+    null_resource.deploy_license
   ]
 }

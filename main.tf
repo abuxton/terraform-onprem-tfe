@@ -59,11 +59,6 @@ resource "null_resource" "deploy_certs" {
     source      = var.tfe_license_filepath
     destination = "${var.tfe_install_dir}/license.rli"
   }
-  provisioner "file" {
-    # Deploy the tfe license from var.tfe_license_filepath
-    source      = var.tfe_license_filepath
-    destination = "${var.tfe_install_dir}/license.rli"
-  }
 }
 
 resource "null_resource" "deploy_license" {
@@ -78,6 +73,13 @@ resource "null_resource" "deploy_license" {
   provisioner "file" {
     # Deploy the tfe license from var.tfe_license_filepath
     source      = var.tfe_license_filepath
-    destination = "${var.tfe_config_dir}/license.rli"
+    destination = "${var.tfe_install_dir}/license.rli"
+  }
+  provisioner "remote-exec" {
+    # now move license to config dir
+    inline = [
+      "sudo mv ${var.tfe_install_dir}/license.rli ${var.tfe_config_dir}/license.rli",
+      "sudo chmod 0777 ${var.tfe_config_dir}/license.rli"
+    ]
   }
 }

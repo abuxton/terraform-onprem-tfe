@@ -143,12 +143,18 @@ main() {
 
   # optionally retrieve certs
   if [[ "${tfe_cert_secret_path}" != "" ]]; then
-    echo "certs be deployed by remote_exec provider"
-  fi
+    echo "certs will be deployed by remote_exec provider"
+    TFE_CERT_PATH="$TFE_CONFIG_DIR/cert.pem"
+  else
+		TFE_CERT_PATH=""
+	fi
 
   if [[ "${tfe_cert_privkey_path}" != "" ]]; then
-    echo "certs be deployed by remote_exec provider"
-  fi
+    echo "certs will be deployed by remote_exec provider"
+		TFE_KEY_PATH="$TFE_CONFIG_DIR/privkey.pem"
+  else
+		TFE_KEY_PATH=""
+	fi
 
   if [[ "${tfe_ca_bundle_path}" != "" ]]; then
     $CA_CERTS=$(cat $TFE_CONFIG_DIR/certs.ca-bundle)
@@ -164,7 +170,7 @@ main() {
   cat > $REPL_CONF_PATH << EOF
 {
   "DaemonAuthenticationType": "password",
-  "DaemonAuthenticationPassword": "${console_password}}",
+  "DaemonAuthenticationPassword": "${console_password}",
   "ImportSettingsFrom": "$TFE_SETTINGS_PATH",
 %{ if airgap_install == true ~}
   "LicenseBootstrapAirgapPackagePath": "$TFE_AIRGAP_PATH",
@@ -175,8 +181,8 @@ main() {
   "TlsBootstrapHostname": "${tfe_hostname}",
   "TlsBootstrapType": "${tls_bootstrap_type}",
 %{ if tls_bootstrap_type == "server-path" ~}
-  "TlsBootstrapCert": "$TFE_CONFIG_DIR/cert.pem",
-  "TlsBootstrapKey": "$TFE_CONFIG_DIR/privkey.pem",
+  "TlsBootstrapCert": $TFE_CERT_PATH
+  "TlsBootstrapKey": $TFE_KEY_PATH,
 %{ endif ~}
   "RemoveImportSettingsFrom": ${remove_import_settings_from},
   "BypassPreflightChecks": true
@@ -253,7 +259,7 @@ EOF
       "value": "production"
   },
   "log_forwarding_config": {
-    "value": "$LOG_FORWARDING_CONFIG"
+    "value": ""
   },
   "log_forwarding_enabled": {
     "value": "${log_forwarding_enabled}"
