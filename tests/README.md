@@ -1,14 +1,18 @@
-# Test
+# Test <!-- omit in toc -->
 
 The test are based on the usage of the Vagrant file contained in this folder.
 
+- [Getting started](#getting-started)
+	- [Running Vagrant](#running-vagrant)
+	- [Running terraform](#running-terraform)
+		- [defaults](#defaults)
 ## Getting started
 
 You'll need
 - a local terraform client (>= 0.14.1)
 - Vagrant installed [https://www.vagrantup.com/](https://www.vagrantup.com/)
 
-review the ./testname/main.tf for the variables being used
+review the ./deployment-scenerio/main.tf for the variables being used
 
 ### Running Vagrant
 
@@ -29,6 +33,8 @@ VM, run `vagrant status NAME`.
 
 ```
 
+Once you run `vagrant up NAME` check the log messages, RHEL and CENTOS need a `vagrant reload` to manage SELINUX.
+
 ### Running terraform
 
 The sub folders under `./tests` represent deployment scenarios once you've run `vagrant up` as the obove instructions travers into the desired scenario, alternatively copy a scenario and tweak for your use case.
@@ -48,12 +54,24 @@ The sub folders under `./tests` represent deployment scenarios once you've run `
 
 ```
 
-#### default
+#### defaults
 
-The `default` scenario is a default install of Replicated the orchetrator used to deploy Terraform, once the terraform code as executed you will see a url as an out put of Terrafrom and when opened in a browser the deployment will be finishing. This scenerio allows you to manually configure and deploy Terraform.
+The `defaults` scenario is a default install of Replicated the orchestrator used to deploy Terraform, once the terraform code as executed you will see a url as an out put of Terraform and when opened in a browser the deployment will be finishing. This scenario allows you to manually configure and deploy Terraform.
 
-```shell
-❯ cat main.tf
+review the variables are set in `./defaults/example.auto.tfvars` based on `vagrant up centos7` adjust as required, or copy the folder and update for your scenario.
+
+```bash
+
+❯ cat tests/defaults/example.auto.tfvars
+private-address        = "192.168.56.1"
+public-address         = "127.0.0.1"
+connection_private_key = "../.vagrant/machines/centos7/virtualbox/private_key"
+verbose                = true
+
+```
+
+```bash
+❯ cat ./defaults/main.tf
 module "tfe" {
   source             = "../.."
   tfe_hostname       = "localhost"
@@ -65,5 +83,7 @@ module "tfe" {
   connection_port        = 2222
   connection_private_key = var.connection_private_key
   verbose                = var.verbose
+  public-address         = var.public-address
+  private-address        = var.private-address
 }
 ```

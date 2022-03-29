@@ -1,4 +1,4 @@
-# TFE onPrem
+# TFE onPrem <!-- omit in toc -->
 This Terraform module accelerator deploys TFE onPrem whether virtualized (VMware) or on physical `tin` servers in what is referred to as a `Standalone Deployment`.
 
  There are a number of different _deployment scenarios_ supported; see the [examples](###Examples) section for further details supporting the various [Operational Modes](https://www.terraform.io/docs/enterprise/before-installing/index.html#operational-mode-decision)
@@ -8,7 +8,24 @@ This Terraform module accelerator deploys TFE onPrem whether virtualized (VMware
  - TODO external service
 
  The module code should be reviewed, potentially tweaked/customized, and **tested in a non-production environment**.
-<p>&nbsp;</p>
+
+- [Configuration options](#configuration-options)
+		- [Load Balancing](#load-balancing)
+		- [Secrets Management](#secrets-management)
+			- [Install Secrets](#install-secrets)
+		- [Active-Active](#active-active)
+		- [Database](#database)
+		- [Alternative Terraform Build Worker (TBW) Image](#alternative-terraform-build-worker-tbw-image)
+	- [Post Deploy](#post-deploy)
+		- [Logging In](#logging-in)
+	- [Troubleshooting](#troubleshooting)
+	- [Docs](#docs)
+	- [Requirements](#requirements)
+	- [Providers](#providers)
+	- [Modules](#modules)
+	- [Resources](#resources)
+	- [Inputs](#inputs)
+	- [Outputs](#outputs)
 
 ## Prerequisites
 - Terraform >= 0.14 installed on clients/workstations
