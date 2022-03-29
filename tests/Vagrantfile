@@ -34,7 +34,7 @@ EOF
 
 	    # reconfigure SELINUX to permissive, you will need to reboot the host
 	    # https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/using_selinux/changing-selinux-states-and-modes_using-selinux
-	    sed -i s/^SELINUX=enforcing/SELINUX=permissive/g /etc/selinux/config
+	    sudo sed -i s/^SELINUX=enforcing/SELINUX=permissive/g /etc/selinux/config
 	    sudo getenforce
 	    echo "Once finished reboot the vagrant host `vagrant reload`"
 	  SHELL
@@ -50,6 +50,11 @@ EOF
 	  yum install jq tree -y
 	  rpm -qa | grep -i jq
 	  jq -Version
+          # reconfigure SELINUX to permissive, you will need to reboot the host
+	  # https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/using_selinux/changing-selinux-states-and-modes_using-selinux
+          sudo sed -i s/^SELINUX=enforcing/SELINUX=permissive/g /etc/selinux/config
+          sudo getenforce
+	  echo "Once finished reboot the vagrant host `vagrant reload`"
 	SHELL
 	end
 	      config.vm.define "ubuntu20" do |ubuntu20|

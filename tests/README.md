@@ -28,3 +28,42 @@ above with their current state. For more information about a specific
 VM, run `vagrant status NAME`.
 
 ```
+
+### Running terraform
+
+The sub folders under `./tests` represent deployment scenarios once you've run `vagrant up` as the obove instructions travers into the desired scenario, alternatively copy a scenario and tweak for your use case.
+
+```shell
+.
+├── defaults
+│   ├── example.auto.tfvars
+│   ├── main.tf
+│   ├── outputs.tf
+│   └── variables.tf
+└── demo
+    ├── example.auto.tfvars
+    ├── main.tf
+    ├── outputs.tf
+    └── variables.tf
+
+```
+
+#### default
+
+The `default` scenario is a default install of Replicated the orchetrator used to deploy Terraform, once the terraform code as executed you will see a url as an out put of Terrafrom and when opened in a browser the deployment will be finishing. This scenerio allows you to manually configure and deploy Terraform.
+
+```shell
+❯ cat main.tf
+module "tfe" {
+  source             = "../.."
+  tfe_hostname       = "localhost"
+  tfe_fqdn           = "localhost"
+  physical           = true
+  replicated_install = true
+  // run `vagrant up` from the `terraform-onprem-tfe/tests/physical-demo` folder
+  connection_user        = "vagrant"
+  connection_port        = 2222
+  connection_private_key = var.connection_private_key
+  verbose                = var.verbose
+}
+```
