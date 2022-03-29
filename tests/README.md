@@ -46,7 +46,7 @@ The sub folders under `./tests` represent deployment scenarios once you've run `
 │   ├── main.tf
 │   ├── outputs.tf
 │   └── variables.tf
-└── demo
+└── online-demo-mode
     ├── example.auto.tfvars
     ├── main.tf
     ├── outputs.tf
@@ -87,3 +87,34 @@ module "tfe" {
   private-address        = var.private-address
 }
 ```
+
+Once the terraform as completed an apply run, you should see two (2) resources
+
+```bash
+
+❯ tf apply -var-file=example.auto.tfvars
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # module.tfe.null_resource.replicated_default[0] will be created
+  + resource "null_resource" "replicated_default" {
+      + id = (known after apply)
+    }
+
+  # module.tfe.null_resource.tfe_install_deploy[0] will be created
+  + resource "null_resource" "tfe_install_deploy" {
+      + id = (known after apply)
+    }
+
+Plan: 2 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + tfe_replicated_console_url = "https://localhost:8800"
+...
+
+```
+
+From here you follow <https://www.terraform.io/enterprise/install/interactive/installer> to complete the installation.

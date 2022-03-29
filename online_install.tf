@@ -7,11 +7,11 @@ resource "null_resource" "online_install" {
     host        = var.tfe_hostname
     port        = var.connection_port
   }
-  provisioner "file" {
-    # Deploy the tfe license from var.tfe_license_filepath
-    source      = var.tfe_license_filepath
-    destination = "${var.tfe_install_dir}/license.rli"
-  }
+  // provisioner "file" {
+  //   # Deploy the tfe license from var.tfe_license_filepath
+  //   source      = var.tfe_license_filepath
+  //   destination = "${var.tfe_install_dir}/license.rli"
+  // }
 
   // provisioner "file" {
   //   # Deploy the certs, key, cert and ca_bundle

@@ -33,7 +33,7 @@ variable "tfe_install_dir" {
 }
 variable "tfe_config_dir" {
   type        = string
-  default     = "/etc/"
+  default     = "/etc"
   description = "LFS path to where config files will be extracted and deployed"
 }
 

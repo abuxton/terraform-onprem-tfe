@@ -78,6 +78,6 @@ resource "null_resource" "deploy_license" {
   provisioner "file" {
     # Deploy the tfe license from var.tfe_license_filepath
     source      = var.tfe_license_filepath
-    destination = "${var.tfe_install_dir}/license.rli"
+    destination = "${var.tfe_config_dir}/license.rli"
   }
 }
