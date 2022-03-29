@@ -164,7 +164,7 @@ main() {
   cat > $REPL_CONF_PATH << EOF
 {
   "DaemonAuthenticationType": "password",
-  "DaemonAuthenticationPassword": "$CONSOLE_PASSWORD",
+  "DaemonAuthenticationPassword": "${console_password}}",
   "ImportSettingsFrom": "$TFE_SETTINGS_PATH",
 %{ if airgap_install == true ~}
   "LicenseBootstrapAirgapPackagePath": "$TFE_AIRGAP_PATH",
@@ -219,7 +219,7 @@ EOF
       "value": "${enable_metrics_collection}"
   },
   "enc_password": {
-      "value": "$ENC_PASSWORD"
+      "value": "${enc_password}"
   },
   "extern_vault_addr": {},
   "extern_vault_enable": {
