@@ -54,7 +54,8 @@ EOF
 	  # https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/using_selinux/changing-selinux-states-and-modes_using-selinux
           sudo sed -i s/^SELINUX=enforcing/SELINUX=permissive/g /etc/selinux/config
           sudo getenforce
-	  echo "Once finished reboot the vagrant host `vagrant reload`"
+	  echo 'Once finished reboot the vagrant host `vagrant reload`'
+
 	SHELL
 	end
 	      config.vm.define "ubuntu20" do |ubuntu20|
@@ -111,6 +112,7 @@ EOF
 	# backing providers for Vagrant. These expose provider-specific options.
 	# Example for VirtualBox:
 	#
+	config.vm.network "private_network", ip: "192.168.56.1"
 	config.vm.network "forwarded_port", guest: 80, host: 80
 	config.vm.network "forwarded_port", guest: 443, host: 443
 	config.vm.network "forwarded_port", guest: 8800, host: 8800
