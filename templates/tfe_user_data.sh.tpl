@@ -194,15 +194,6 @@ EOF
   echo "[INFO] Generating $TFE_SETTINGS_PATH file."
   cat > $TFE_SETTINGS_PATH << EOF
 {
-  "aws_access_key_id": {},
-  "aws_instance_profile": {
-      "value": "1"
-  },
-  "aws_secret_access_key": {},
-  "azure_account_key": {},
-  "azure_account_name": {},
-  "azure_container": {},
-  "azure_endpoint": {},
   "backup_token": {},
   "ca_certs": {
     "value": "$CA_CERTS"
@@ -242,9 +233,6 @@ EOF
   "force_tls": {
     "value": "${force_tls}"
   },
-  "gcs_bucket": {},
-  "gcs_credentials": {},
-  "gcs_project": {},
   "hairpin_addressing": {
     "value": "${hairpin_addressing}"
   },
@@ -273,54 +261,15 @@ EOF
   "metrics_endpoint_port_https": {
       "value": "${metrics_endpoint_port_https}"
   },
-  "pg_dbname": {
-      "value": ""
-  },
-  "pg_extra_params": {
-      "value": "sslmode=require"
-  },
-  "pg_netloc": {
-      "value": ""
-  },
-  "pg_password": {
-      "value": ""
-  },
-  "pg_user": {
-      "value": ""
-  },
   "placement": {
       "value": ""
   },
   "production_type": {
       "value": "${production_type}"
   },
-  "redis_host": {
-    "value": ""
-  },
-  "redis_pass": {
-    "value": ""
-  },
-  "redis_port": {
-    "value": ""
-  },
-  "redis_use_password_auth": {
-    "value": ""
-  },
-  "redis_use_tls": {
-    "value": ""
-  },
   "restrict_worker_metadata_access": {
     "value": "${restrict_worker_metadata_access}"
   },
-  "s3_bucket": {
-      "value": ""
-  },
-  "s3_endpoint": {},
-  "s3_region": {
-      "value": ""
-  },
-  "s3_sse": {},
-  "s3_sse_kms_key_id": {},
   "tbw_image": {
       "value": "${tbw_image}"
   },
