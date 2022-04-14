@@ -18,6 +18,8 @@
 *_REMOTE_*.txt
 
 ### Terraform ###
+# ignore any Terraform enterprise license files
+*.rli
 # Local .terraform directories
 **/.terraform/*
 

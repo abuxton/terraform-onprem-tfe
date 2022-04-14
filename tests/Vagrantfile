@@ -34,10 +34,11 @@ EOF
 
 	    # reconfigure SELINUX to permissive, you will need to reboot the host
 	    # https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/using_selinux/changing-selinux-states-and-modes_using-selinux
-	    sed -i s/^SELINUX=enforcing/SELINUX=permissive/g /etc/selinux/config
+	    sudo sed -i s/^SELINUX=enforcing/SELINUX=permissive/g /etc/selinux/config
 	    sudo getenforce
 	    echo "Once finished reboot the vagrant host `vagrant reload`"
 	  SHELL
+	  # https://www.cyberciti.biz/faq/how-do-i-determine-rhel-version/
 	end
 	config.vm.define "centos7" do |centos7|
 	  centos7.vm.box = "centos/7"
@@ -49,6 +50,12 @@ EOF
 	  yum install jq tree -y
 	  rpm -qa | grep -i jq
 	  jq -Version
+          # reconfigure SELINUX to permissive, you will need to reboot the host
+	  # https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/using_selinux/changing-selinux-states-and-modes_using-selinux
+          sudo sed -i s/^SELINUX=enforcing/SELINUX=permissive/g /etc/selinux/config
+          sudo getenforce
+	  echo 'Once finished reboot the vagrant host `vagrant reload`'
+
 	SHELL
 	end
 	      config.vm.define "ubuntu20" do |ubuntu20|
@@ -105,6 +112,7 @@ EOF
 	# backing providers for Vagrant. These expose provider-specific options.
 	# Example for VirtualBox:
 	#
+	config.vm.network "private_network", ip: "192.168.56.1"
 	config.vm.network "forwarded_port", guest: 80, host: 80
 	config.vm.network "forwarded_port", guest: 443, host: 443
 	config.vm.network "forwarded_port", guest: 8800, host: 8800
