@@ -38,43 +38,35 @@ EOF
 	    # https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/using_selinux/changing-selinux-states-and-modes_using-selinux
 	    sudo sed -i s/^SELINUX=enforcing/SELINUX=permissive/g /etc/selinux/config
 	    sudo getenforce
-	    echo "Once finished reboot the vagrant host `vagrant reload`"
+	    echo "Once finished reboot the vagrant host 'vagrant reload' "
 	  SHELL
 	  # https://www.cyberciti.biz/faq/how-do-i-determine-rhel-version/
 	end
-	config.vm.define "rhel86" do |rhel86|
-		rhel86.vm.box = "generic/rhel8"
-		rhel86.vm.box_version = "4.1.14"
-		rhel86.vm.synced_folder "./", "/vagrant"
-		rhel86.vm.provision "shell", inline: <<-SHELL
-		  # https://www.cyberithub.com/how-to-install-jq-json-processor-on-rhel-centos-7-8/#Step_2_Install_EPEL_Repository
-		  yum install epel-release -y
-		  yum update -y
-		  yum install jq tree  -y
-		  #go install github.com/straubt1/tfx@latest
-		  rpm -qa | grep -i jq
-		  jq -Version
+	config.vm.define "centos8" do |centos8|
+		centos8.vm.box = "centos/8"
+		centos8.vm.disk :disk, size: "50GB", primary: true
+		# centos mounts ./ as /vagrant by default
+		centos8.vm.provision "shell", inline: <<-SHELL
 
-		  ## ok now we have some unmet dependacies and it gets a little hacky (note these are not available in https://dl.fedoraproject.org/pub/epel/7/x86_64/Packages/)
-		  # source from centos/os repo
-		  sudo cat > /etc/yum.repos.d/centos-os.repo << EOF
-[centos-os]
-name=Centos os - $basearch
-baseurl=http://mirror.centos.org/centos/7/os/x86_64/
-enabled=1
-gpgcheck=0
-EOF
+		# https://techglimpse.com/failed-metadata-repo-appstream-centos-8/
+		sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*
+		sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
+		# https://www.cyberithub.com/how-to-install-jq-json-processor-on-rhel-centos-7-8/#Step_2_Install_EPEL_Repository
+		yum install epel-release -y
+		yum update -y
+		yum install jq tree  -y
+		#go install github.com/straubt1/tfx@latest
+		rpm -qa | grep -i jq
+		jq -Version
 
-		  sudo yum install policycoreutils-python -y
+		# reconfigure SELINUX to permissive, you will need to reboot the host
+		# https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/using_selinux/changing-selinux-states-and-modes_using-selinux
+		sudo sed -i s/^SELINUX=enforcing/SELINUX=permissive/g /etc/selinux/config
+		sudo getenforce
+		echo 'Once finished reboot the vagrant host `vagrant reload`'
 
-		  # reconfigure SELINUX to permissive, you will need to reboot the host
-		  # https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/using_selinux/changing-selinux-states-and-modes_using-selinux
-		  sudo sed -i s/^SELINUX=enforcing/SELINUX=permissive/g /etc/selinux/config
-		  sudo getenforce
-		  echo "Once finished reboot the vagrant host `vagrant reload`"
-		SHELL
-		# https://www.cyberciti.biz/faq/how-do-i-determine-rhel-version/
-	end
+	      SHELL
+	      end
 	config.vm.define "centos7" do |centos7|
 	  centos7.vm.box = "centos/7"
 	  # centos mounts ./ as /vagrant by default
