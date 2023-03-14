@@ -74,9 +74,7 @@ resource "null_resource" "deploy_license" {
     # Deploy the tfe license from var.tfe_license_filepath
     source      = var.tfe_license_filepath
     destination = "${var.tfe_install_dir}/license.rli"
-    depends_on = [
-      null_resource.tfe_install_deploy,
-    ]
+
   }
   provisioner "remote-exec" {
     # now move license to config dir
@@ -85,4 +83,7 @@ resource "null_resource" "deploy_license" {
       "sudo chmod 0777 ${var.tfe_config_dir}/license.rli"
     ]
   }
+  depends_on = [
+    null_resource.tfe_install_deploy,
+  ]
 }
