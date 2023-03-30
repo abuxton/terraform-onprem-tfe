@@ -157,6 +157,7 @@ EOF
 		# TFE Requirements
 		vmware_desktop.vmx["memsize"] = "4096"
 		vmware_desktop.vmx["numvcpus"] = "2"
+		vmware_desktop.vmx["ethernet0.pcislotnumber"] = "32"
 	end
 	#
 	# View the documentation for the provider you are using for more
